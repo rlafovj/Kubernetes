@@ -1,0 +1,35 @@
+spring:
+  application:
+    name: api
+  datasource:
+    url: jdbc:mysql:// 3.34.13.4:3306/linusdb?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        jdbc:
+          lob:
+            non_contextual_creation: true
+        format_sql: true
+    show-sql: true
+    defer-datasource-initialization: true
+    open-in-view: true
+  sql:
+    init:
+      mode: always
+      data-locations: classpath:data.sql
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: debug
+        type: trace
+jwt:
+  iss: linus.com
+  exp: 3600
+  secret: linuslinuslinuslinuslinuslinuslinuslinuslinuslinuslinuslinuslinuslinuslinuslinuslinuslinuslinuslinuslinuslinus

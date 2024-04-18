@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="f4954e54-ac80-4d2b-bddf-f5f30af48158" name="linusserver" url="http://43.200.170.37">
+        <fileTransfer accessType="SFTP" host="43.200.170.37" port="22" sshConfigId="a980df66-57a2-480a-af5d-fc6af9d8323f" sshConfig="ubuntu@43.200.170.37:22 key" keyPair="true">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" keepAliveTimeout="0" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
