@@ -21,3 +21,13 @@ export const loginAPI = async(userCredentials: {username: string, password: stri
         return error
     }
 }
+export const existsUsernameAPI = async(username: string)=>{
+    try {
+        const response = await instance.post('/users/exists-username', username)
+        console.log(response.data.message)
+        return response.data
+    } catch (error) {
+        console.log("existsUsernameAPI Error : "+error)
+        return error
+    }
+}

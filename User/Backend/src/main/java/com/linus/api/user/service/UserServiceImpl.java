@@ -6,16 +6,20 @@ import com.linus.api.common.component.PageRequestVO;
 import com.linus.api.user.model.User;
 import com.linus.api.user.model.UserDTO;
 import com.linus.api.user.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
+import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class UserServiceImpl implements UserService {
   private final UserRepository repo;
   private final JwtProvider jwtProvider;
@@ -48,14 +52,38 @@ public class UserServiceImpl implements UserService {
     return null;
   }
 
+  @Transactional
   @Override
   public MessengerVO login(UserDTO param) {
 
-    boolean flag = repo.findByUsername(param.getUsername()).get().getPassword().equals(param.getPassword());
+//    boolean flag = repo.findByUsername(param.getUsername()).get().getPassword().equals(param.getPassword());
+    User user = repo.findByUsername(param.getUsername()).get();
+    boolean flag = user.getPassword().equals(param.getPassword());
+
+
+    String token = jwtProvider.createToken(entityToDto(user));
+    Base64.Decoder decoder = Base64.getDecoder();
+
+    String[] chunk = token.split("\\.");
+    String payload = new String(decoder.decode(chunk[1]));
+    String header = new String(decoder.decode(chunk[0]));
+
+    log.info("Token Header : "+header);
+    log.info("Token Payload : "+payload);
 
     return MessengerVO.builder()
             .message(flag ? "SUCCESS" : "FAIL")
-            .token(flag ? jwtProvider.createToken(param) : "None")
+            .token(flag ? token : "None")
+            .build();
+  }
+
+  @Override
+  public MessengerVO existsUsername(String username){
+    boolean flag = repo.findByUsername(username).isPresent();
+    log.info(String.valueOf(flag));
+    log.info(username);
+    return MessengerVO.builder()
+            .message(flag ? "SUCCESS" : "FAIL")
             .build();
   }
 

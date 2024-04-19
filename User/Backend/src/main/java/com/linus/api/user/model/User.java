@@ -39,6 +39,8 @@ public class User extends BaseEntity {
     @Column(name= "JOB")
     private String job;
 
+    private String token;
+
     @Builder(builderMethodName = "builder")
     public User(Long id, String username, String password,
                 String name, String phone,

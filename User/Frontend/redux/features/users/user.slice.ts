@@ -1,6 +1,5 @@
 import {createSlice} from '@reduxjs/toolkit'
-import { initialState } from './user.init'
-import { findAllUsers, login } from './user.service'
+import { existsUsername, findAllUsers, login } from './user.service'
 import { IUser } from './user.model'
 
 const status = {
@@ -20,7 +19,7 @@ interface UserState {
     auth? : IAuth
 }
 
-export const inintialState: UserState = {
+export const initialState: UserState = {
     array: [],
     json: {} as IUser,
     auth: {} as IAuth
@@ -49,6 +48,7 @@ export const userSlice = createSlice({
     builder
     .addCase(findAllUsers.fulfilled, (state: any, {payload}:any )=>{state.array=payload})
     .addCase(login.fulfilled, (state: any, {payload}:any )=>{state.auth=payload})
+    .addCase(existsUsername.fulfilled, (state: any, {payload}:any )=>{state.json.message=payload})
     }
 })
 
@@ -60,6 +60,7 @@ export const getAuth = (state: any) => (
     // console.log('------------------ Before Login useSelector ---------------')
     // console.log(JSON.stringify(state.user.message))
     state.user.auth)
+export const getExistsUsername = (state: any) => (state.user.json.message)
   
 
 export const {} = userSlice.actions

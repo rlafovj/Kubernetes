@@ -49,6 +49,10 @@ public class UserController {
         return ResponseEntity.ok(service.login(param));
     }
 
+    @PostMapping(path = "/exists-username")
+    public ResponseEntity<MessengerVO> existsUsername(@RequestBody String username) {
+        return ResponseEntity.ok(service.existsUsername(username));
+    }
 
     @GetMapping("/list")
     public ResponseEntity<List<UserDTO>> findAll() throws SQLException {

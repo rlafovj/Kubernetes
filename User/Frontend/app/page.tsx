@@ -8,25 +8,47 @@ import { parseCookies, setCookie } from 'nookies';
 import { useEffect, useState } from "react";
 import { NextPage } from "next";
 import { useDispatch, useSelector } from "react-redux";
-import { login } from "@/redux/features/users/user.service";
-import { getAuth } from "@/redux/features/users/user.slice";
+import { existsUsername, login } from "@/redux/features/users/user.service";
+import { getAuth, getExistsUsername } from "@/redux/features/users/user.slice";
 import { IUser } from "./pages/users/model/user";
+import { jwtDecode } from "jwt-decode";
+import { Alert } from "@mui/material";
 
 
 const LoginWithGoogleButton = () => {
   const dispatch = useDispatch();
   const auth = useSelector(getAuth)
   const [user, setUser] = useState({} as IUser)
+  const isExistsId = useSelector(getExistsUsername)
+  const [isRightId, setIsRightId] = useState(false)
+  const [isRightPw, setIsRightPw] = useState(false)
+  const [isNotNull, setIsNotNull] = useState(false)
 
   // const [username, setUsername] = useState("");
   // const[password,setPassword] = useState("")
   const handleUsername = (e : any)=>{
-    setUser({...user,
-    username: e.target.value})
+    const  ID_CHECK = /^[a-z]+[a-zA-Z0-9]{5,19}$/
+    //영어 소문자로 시작하는 6 ~ 20자의 영문자 또는 숫자
+    if(ID_CHECK.test(e.target.value)){
+      setIsRightId(true)
+      setUser({...user,
+        username: e.target.value})
+    }else{
+      setIsRightId(false)
+    }
   }
   const handlePassword = (e : any)=>{
+    // const  PW_CHECK = /^[a-zA-Z0-9]+[a-zA-Z0-9]{3,19}$/
+    // if(){
+
+    // }else{
+    //   alert('잘못된 형식입니다.')
+    // }
     setUser({...user,
       password: e.target.value})
+  }
+  const existsId = (username: string)=>{
+    
   }
   const router = useRouter();
   
@@ -48,20 +70,25 @@ const LoginWithGoogleButton = () => {
     // //     
     // // }
     // })
-    dispatch(login(user))
+    dispatch(existsUsername(user.username))
+    // dispatch(login(user))
     
   }
-  useEffect(()=>{
-    if (auth != null && auth.message === 'SUCCESS'){
-      setCookie({}, 'message', auth.message, {httpOnly: false, path: '/'})
-      setCookie({}, 'token', auth.token, {httpOnly: false, path: '/'})
-      console.log('서버에서 넘어온 메세지 '+parseCookies().message)
-      console.log('서버에서 넘어온 토큰 '+parseCookies().token)
-      router.push('/pages/boards/list')
-    }else{
-      console.log('Login Failed')
-    }
-  }, [auth])
+  useEffect(()=>
+      {if(isExistsId === 'SUCCESS'){
+        if (auth != null && auth.message === 'SUCCESS'){
+          setCookie({}, 'message', auth.message, {httpOnly: false, path: '/'})
+          setCookie({}, 'token', auth.token, {httpOnly: false, path: '/'})
+          console.log('서버에서 넘어온 메세지 '+parseCookies().message)
+          console.log('서버에서 넘어온 토큰 '+parseCookies().token)
+          console.log(jwtDecode(parseCookies().token))
+          router.push('/pages/boards/list')
+        }else{
+          console.log('Login Failed')
+        }}else{
+          console.log('ID Failed')
+        }
+    }, [auth, isRightId]);
 
   return (
     <div className='margincenter w-4/5 my-[30px] border-double border-4'>
@@ -87,6 +114,18 @@ const LoginWithGoogleButton = () => {
                 required
               />
             </div>
+            {isRightId ?
+            (<pre>
+              <h6 className="text-green-500">
+                올바른 형식입니다.
+              </h6>
+            </pre>) :
+            (<pre>
+              <h6 className="text-red-500">
+                잘못된 형식입니다.
+              </h6>
+            </pre>)
+            }
             <div className="mt-4 flex flex-col justify-between">
               <div className="flex justify-between">
                 <label className="block text-gray-700 text-sm font-bold mb-2">
@@ -105,6 +144,11 @@ const LoginWithGoogleButton = () => {
                 Forget Password?
               </a>
             </div>
+            {isRightPw && (<pre>
+              <h6 className="text-red-500">
+                잘못된 형식입니다.
+              </h6>
+            </pre>)}
             <div className="mt-8">
               <button 
               onClick={handleSubmit}
