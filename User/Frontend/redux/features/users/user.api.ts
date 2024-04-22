@@ -1,4 +1,4 @@
-import { instance } from "@/redux/common/configs/axios-config"
+import instance from "@/redux/common/configs/axios-config";
 
 export const findAllUsersAPI = async(page: number)=>{
     try {
@@ -21,6 +21,18 @@ export const loginAPI = async(userCredentials: {username: string, password: stri
         return error
     }
 }
+
+export const logoutAPI = async () => {
+    try{
+        const response = await instance.get(`/users/exists-username`,{params: {}})
+        console.log('logoutAPI 결과: '+ response.data)
+        return response.data
+    }catch(error){
+        console.log(error)
+        return error
+    }
+}
+
 export const existsUsernameAPI = async(username: string)=>{
     try {
         const response = await instance.post('/users/exists-username', username)

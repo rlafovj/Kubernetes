@@ -61,19 +61,12 @@ public class UserServiceImpl implements UserService {
     boolean flag = user.getPassword().equals(param.getPassword());
 
 
-    String token = jwtProvider.createToken(entityToDto(user));
-    Base64.Decoder decoder = Base64.getDecoder();
-
-    String[] chunk = token.split("\\.");
-    String payload = new String(decoder.decode(chunk[1]));
-    String header = new String(decoder.decode(chunk[0]));
-
-    log.info("Token Header : "+header);
-    log.info("Token Payload : "+payload);
+    String AccessToken = jwtProvider.createToken(entityToDto(user));
+    jwtProvider.getPayload(AccessToken);
 
     return MessengerVO.builder()
             .message(flag ? "SUCCESS" : "FAIL")
-            .token(flag ? token : "None")
+            .accessToken(flag ? AccessToken : "None")
             .build();
   }
 

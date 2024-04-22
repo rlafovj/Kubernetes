@@ -4,6 +4,7 @@ import com.linus.api.user.model.UserDTO;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.io.Decoders;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Component;
 import javax.crypto.SecretKey;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.Base64;
 import java.util.Date;
 
 @Log4j2
@@ -42,5 +44,26 @@ public class JwtProvider {
             .compact();
     log.info("로그인성공으로 발급된 토큰 : " + token);
     return token;
+  }
+
+  public String extractTokenFromHeader(HttpServletRequest request) {
+    String bearerToken = request.getHeader("Authorization");
+    if(bearerToken != null && bearerToken.startsWith("Bearer ")) {
+      return bearerToken.substring(7);
+    }
+    return null;
+  }
+
+  public String getPayload(String AccessToken) {
+    Base64.Decoder decoder = Base64.getDecoder();
+
+    String[] chunk = AccessToken.split("\\.");
+    String payload = new String(decoder.decode(chunk[1]));
+    String header = new String(decoder.decode(chunk[0]));
+
+    log.info("AccessToken Header : "+header);
+    log.info("AccessToken Payload : "+payload);
+
+    return payload;
   }
 }

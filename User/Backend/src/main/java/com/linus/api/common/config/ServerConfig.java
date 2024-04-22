@@ -10,7 +10,7 @@ import org.springframework.format.datetime.DateFormatter;
 public class ServerConfig {
   @Bean
   public String datePattern(){
-    return "yyy-MM-dd'T'HH:mm:ss.XXX";
+    return "yyyy-MM-dd'T'HH:mm:ss.XXX";
   }
   @Bean
   public DateFormatter defaultDateFormatter(){
