@@ -1,8 +1,8 @@
-import { instance } from '@/redux/common/configs/axios-config'
+import  instance  from '@/redux/common/configs/axios-config'
 
 export const findAllArticlesAPI = async (page: number) => {
     try {
-        const response = await instance.get('/articles/list',{
+        const response = await instance().get('/articles/list',{
             params: {page, limit: 10}
         })
         console.log('-------test----------')
@@ -16,7 +16,7 @@ export const findAllArticlesAPI = async (page: number) => {
 
 export const findArticleByBoardIdAPI = async (page: number ,id: number) => {
     try{
-    return (await instance.get(`/articles/list/${id}`, {params: {page, limit: 10, id}})).data
+    return (await instance().get(`/articles/list/${id}`, {params: {page, limit: 10, id}})).data
     } catch (error) {
     console.log(error)
     return error

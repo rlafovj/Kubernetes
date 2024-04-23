@@ -1,6 +1,6 @@
 "use client";
 import { API } from "@/redux/common/enums/API";
-import AxiosConfig from "@/redux/common/configs/axios-config";
+import {instance as AxiosConfig} from "@/redux/common/configs/axios-config";
 import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -19,7 +19,7 @@ const LoginPage : NextPage = () => {
   const router = useRouter();
   const handleSubmit = ()=>{
     alert("리퀘스트가 가져가는 아이디 : " + username);
-    axios.post(`${API.USER}/login`, {username,password}, AxiosConfig()).then(res => {
+    instance().post(`${API.USER}/login`, {username,password}, AxiosConfig()).then(res => {
       const message = res.data.message
       alert((message))
       if(message === 'SUCCESS'){

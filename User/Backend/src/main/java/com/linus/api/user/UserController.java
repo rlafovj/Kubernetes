@@ -49,6 +49,11 @@ public class UserController {
         return ResponseEntity.ok(service.login(param));
     }
 
+    @GetMapping(path = "/logout")
+    public ResponseEntity<MessengerVO> logout(@RequestBody String username) {
+        return ResponseEntity.ok(service.logout(username));
+    }
+
     @PostMapping(path = "/exists-username")
     public ResponseEntity<MessengerVO> existsUsername(@RequestBody String username) {
         return ResponseEntity.ok(service.existsUsername(username));

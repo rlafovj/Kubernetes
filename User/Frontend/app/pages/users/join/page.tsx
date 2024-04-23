@@ -3,7 +3,7 @@ import axios from "axios";
 import { useReducer, useState } from "react";
 import { useRouter } from "next/navigation";
 import { API } from "@/redux/common/enums/API";
-import AxiosConfig from "@/redux/common/configs/axios-config";
+import {instance as AxiosConfig} from "@/redux/common/configs/axios-config";
 import { NextPage } from "next";
 // import '../style.css';
 
@@ -37,7 +37,7 @@ const JoinPage : NextPage = () => {
 
   const handleSubmit = ()=>{
     alert("리퀘스트가 가져가는 아이디 : " + username);
-    axios.post(`${API.USER}/join`, {"users" : { username, password, name, phone, address, job }}, AxiosConfig()).then(res => {
+    AxiosConfig.post(`${API.USER}/join`, {"users" : { username, password, name, phone, address, job }}).then(res => {
       alert("리스판스가 가져온 정보 : " + JSON.stringify(res.data))
       router.push('./login');
     })

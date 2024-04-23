@@ -1,3 +1,4 @@
+import axios from 'axios';
 import {createSlice} from '@reduxjs/toolkit'
 import { existsUsername, findAllUsers, login } from './user.service'
 import { IUser } from './user.model'
@@ -48,7 +49,7 @@ export const userSlice = createSlice({
     builder
     .addCase(findAllUsers.fulfilled, (state: any, {payload}:any )=>{state.array=payload})
     .addCase(login.fulfilled, (state: any, {payload}:any )=>{state.auth=payload})
-    .addCase(existsUsername.fulfilled, (state: any, {payload}:any )=>{state.json.message=payload})
+    .addCase(existsUsername.fulfilled, (state: any, {payload}:any )=>{state.existsUsername=payload})
     }
 })
 
@@ -60,7 +61,7 @@ export const getAuth = (state: any) => (
     // console.log('------------------ Before Login useSelector ---------------')
     // console.log(JSON.stringify(state.user.message))
     state.user.auth)
-export const getExistsUsername = (state: any) => (state.user.json.message)
+export const getExistsUsername = (state: any) => (state.user.existsUsername)
   
 
 export const {} = userSlice.actions

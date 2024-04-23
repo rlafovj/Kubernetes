@@ -1,42 +1,27 @@
-import axios from "axios"
-import { parseCookies } from "nookies"
+import axios, { AxiosInstance } from 'axios'
+import { parseCookies } from 'nookies';
 
- //export default function AxiosConfig(){
-//     return {
-//         headers:{
-//         "Cache-Control": "no-cache",
-//         "Content-Type": "application/json",
-//          Authorization: `Bearer blah ~` ,
-//         "Access-Control-Allow-Origin": "*",
-//         }
-//     }
-// } 정적 방식
+export default function instance() {
+    const instance = axios.create({baseURL: process.env.NEXT_PUBLIC_API_URL})
+    setInterceptor(instance)
+    return instance
+}
 
-const instance = axios.create({baseURL: process.env.NEXT_PUBLIC_API_URL})
-
-// 동적 방식
-instance.interceptors.request.use(
-    (request) => {
-        const accessToken = parseCookies().accessToken;
-        console.log('Axios 인터셉터 쿠키에서 토큰 추출함')
-        request.headers['Content-Type'] = 'application/json'
-        request.headers['Authorization'] = `Bearer ${accessToken}`
-        return request
-    },
-    (error) => {
-        console.log('Axios 인터셉터에서 발생한 에러 : '+error)
+export const setInterceptor = (inputInstance:AxiosInstance) => {
+    inputInstance.interceptors.request.use(
+    (config) => {
+        config.headers["Content-Type"] = "application/json"
+        config.headers["Authorization"] = `Bearer ${parseCookies().accessToken}`
+        return config
+    }, (error) => {
+        console.log("AXIOS INTERSEPTOR ERROR OCCURRED : " + error)
         return Promise.reject(error)
-    }
-)
-
-instance.interceptors.response.use(
-    (response) => {
-        if(response.status === 404){
-            console.log('Axios 인터셉터에서 토큰이 없으므로 404 에러 발생')
+    })
+    inputInstance.interceptors.response.use(
+        (response) => {
+            if(response.status === 404) console.log("AXIOS INTERSEPTOR CATCHES 404")
+            return response
         }
-        return response
-    }
-)
-
-
-export default instance
+    )
+    return inputInstance
+}

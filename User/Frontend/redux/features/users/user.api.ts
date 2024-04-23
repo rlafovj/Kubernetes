@@ -2,7 +2,7 @@ import instance from "@/redux/common/configs/axios-config";
 
 export const findAllUsersAPI = async(page: number)=>{
     try {
-        const response = await instance.get('/users/list',{
+        const response = await instance().get('/users/list',{
         params: {page, limit: 10}
     })
         return response.data
@@ -13,7 +13,7 @@ export const findAllUsersAPI = async(page: number)=>{
 }
 export const loginAPI = async(userCredentials: {username: string, password: string})=>{
     try {
-        const response = await instance.post('/users/login', userCredentials)
+        const response = await instance().post('/users/login', userCredentials)
         console.log(response.data.message)
         return response.data
     } catch (error) {
@@ -24,7 +24,7 @@ export const loginAPI = async(userCredentials: {username: string, password: stri
 
 export const logoutAPI = async () => {
     try{
-        const response = await instance.get(`/users/exists-username`,{params: {}})
+        const response = await instance().get(`/users/logout`)
         console.log('logoutAPI 결과: '+ response.data)
         return response.data
     }catch(error){
@@ -35,7 +35,7 @@ export const logoutAPI = async () => {
 
 export const existsUsernameAPI = async(username: string)=>{
     try {
-        const response = await instance.post('/users/exists-username', username)
+        const response = await instance().get('/users/exists-username', {params: {username}})
         console.log(response.data.message)
         return response.data
     } catch (error) {

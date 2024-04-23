@@ -62,7 +62,7 @@ public class UserServiceImpl implements UserService {
 
 
     String AccessToken = jwtProvider.createToken(entityToDto(user));
-    jwtProvider.getPayload(AccessToken);
+    jwtProvider.printPayload(AccessToken);
 
     return MessengerVO.builder()
             .message(flag ? "SUCCESS" : "FAIL")
@@ -78,6 +78,11 @@ public class UserServiceImpl implements UserService {
     return MessengerVO.builder()
             .message(flag ? "SUCCESS" : "FAIL")
             .build();
+  }
+
+  @Override
+  public MessengerVO logout(String username) {
+    return null;
   }
 
   @Override
