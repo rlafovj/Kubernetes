@@ -9,6 +9,7 @@ import com.linus.api.user.service.UserService;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +26,7 @@ import java.util.*;
 @RequestMapping(path = "/api/users")
 @RequiredArgsConstructor
 @Slf4j
+@Log4j2
 
 public class UserController {
     private final UserService service;
@@ -50,13 +52,17 @@ public class UserController {
     }
 
     @GetMapping(path = "/logout")
-    public ResponseEntity<MessengerVO> logout(@RequestBody String username) {
-        return ResponseEntity.ok(service.logout(username));
+    public ResponseEntity<Boolean> logout(@RequestHeader("Authorization") String accessToken) {
+        var flag = service.logout(Long.valueOf(accessToken));
+        return ResponseEntity.ok(null);
     }
 
-    @PostMapping(path = "/exists-username")
-    public ResponseEntity<MessengerVO> existsUsername(@RequestBody String username) {
-        return ResponseEntity.ok(service.existsUsername(username));
+    @GetMapping(path = "/exists-username")
+    public ResponseEntity<Boolean> existsUsername(@RequestParam("username") String username) {
+        log.info("existsUsernam 파라미터 정보 : "+username);
+        Boolean flag = service.existsUsername(username);
+        log.info("existsUsernam 결과 : "+flag);
+        return ResponseEntity.ok(flag);
     }
 
     @GetMapping("/list")

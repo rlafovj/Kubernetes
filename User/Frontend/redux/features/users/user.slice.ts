@@ -58,8 +58,6 @@ export const AllUsers = (state:any)=>{
     return state.user.array;
 }
 export const getAuth = (state: any) => (
-    // console.log('------------------ Before Login useSelector ---------------')
-    // console.log(JSON.stringify(state.user.message))
     state.user.auth)
 export const getExistsUsername = (state: any) => (state.user.existsUsername)
   

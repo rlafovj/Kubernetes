@@ -6,6 +6,7 @@ import com.linus.api.user.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
@@ -15,6 +16,7 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 @Slf4j
+@Log4j2
 @Component
 @RequiredArgsConstructor
 public class AuthInterceptor implements HandlerInterceptor {

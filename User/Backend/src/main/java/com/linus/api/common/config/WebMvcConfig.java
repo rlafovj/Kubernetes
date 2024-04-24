@@ -20,6 +20,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
     interceptor.setParamName("locale");
     registry.addInterceptor(authInterceptor)
             .addPathPatterns("/api/**")
+            .excludePathPatterns("/api/auth/login")
+            .excludePathPatterns("/api/users/**")
             .excludePathPatterns("/favicon.ico");
   }
 }

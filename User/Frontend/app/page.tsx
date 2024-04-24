@@ -5,7 +5,7 @@ import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { parseCookies, setCookie } from 'nookies';
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { NextPage } from "next";
 import { useDispatch, useSelector } from "react-redux";
 import { existsUsername, login } from "@/redux/features/users/user.service";
@@ -18,11 +18,15 @@ import { Alert } from "@mui/material";
 const LoginWithGoogleButton = () => {
   const dispatch = useDispatch();
   const auth = useSelector(getAuth)
+  const passwordRef = useRef<HTMLInputElement>(null);
   const [user, setUser] = useState({} as IUser)
   const isExistsId = useSelector(getExistsUsername)
   const [isRightId, setIsRightId] = useState(false)
   const [isRightPw, setIsRightPw] = useState(false)
   const [isNotNull, setIsNotNull] = useState(false)
+  const [beforeSubmit, setBeforeSubmit] = useState(true)
+  const [len, setLen] = useState('')
+  const [isWrongPw, setIsWrongPW] = useState(false)
 
   // const [username, setUsername] = useState("");
   // const[password,setPassword] = useState("")
@@ -53,42 +57,63 @@ const LoginWithGoogleButton = () => {
   const router = useRouter();
   
   const handleSubmit = ()=>{
-    // console.log('user ...'+JSON.stringify(user))
-
-    // alert("리퀘스트가 가져가는 아이디 : " + username);
-    // axios.post(`${API.USER}/login`, {username,password}, AxiosConfig()).then(res => {
-    //   const message = res.data.message
-    //   alert((message))
-    //   if(message === 'SUCCESS'){
-    //     router.push('/pages/boards/list');
-    //   }
-
-
-    // //else if (message === 'WRONG_PASSWORD');
-    // //     map.put("message", Messenger.WRONG_PASSWORD);
-    // // }else {
-    // //     
-    // // }
-    // })
+    console.log('user ...' + JSON.stringify(user))
     dispatch(existsUsername(user.username))
-    // dispatch(login(user))
-    
-  }
-  useEffect(()=>
-      {if(isExistsId === 'SUCCESS'){
-        if (auth != null && auth.message === 'SUCCESS'){
-          setCookie({}, 'message', auth.message, {httpOnly: false, path: '/'})
-          setCookie({}, 'token', auth.token, {httpOnly: false, path: '/'})
-          console.log('서버에서 넘어온 메세지 '+parseCookies().message)
-          console.log('서버에서 넘어온 토큰 '+parseCookies().token)
-          console.log(jwtDecode(parseCookies().token))
-          router.push('/pages/boards/list')
+      .then((res: any) => {
+        if (res.payload == true) {
+          dispatch(login(user))
+            .then((resp: any) => {
+                console.log('서버에서 넘어온 RES ' + JSON.stringify(resp))
+                console.log('서버에서 넘어온 메시지 1 ' + resp.payload.message)
+                console.log('서버에서 넘어온 토큰 1 ' + resp.payload.accessToken)
+                setCookie({}, 'message', resp.payload.message, { httpOnly: false, path: '/' })
+                setCookie({}, 'accessToken', resp.payload.accessToken, { httpOnly: false, path: '/' })
+                console.log('서버에서 넘어온 메시지 2 ' + parseCookies().message)
+                console.log('서버에서 넘어온 토큰 2 ' + parseCookies().accessToken)
+                console.log('토큰을 디코드한 내용 : ')
+                console.log(jwtDecode<any>(parseCookies().accessToken))
+                router.push('/pages/boards/list')
+                router.refresh()
+            })
+            .catch((err: any) => {
+              console.log('로그인 실패')
+             })
+
         }else{
-          console.log('Login Failed')
-        }}else{
-          console.log('ID Failed')
+          console.log('아이디가 존재하지 않습니다')
+          setBeforeSubmit(false)
+          setIsRightId(false)
         }
-    }, [auth, isRightId]);
+      })
+      .catch((err: any) => {
+        console.log('catch 로직 err 발생 : '+ `${err}`)
+      })
+      .finally(() => {
+        console.log('최종적으로 반드시 이뤄져야 할 로직')
+      })
+    // dispatch(login(user))
+    setBeforeSubmit(false)
+    setIsRightId(false)
+    if (passwordRef.current) {
+      passwordRef.current.value = "";
+    }
+
+  }
+  // useEffect(()=>
+  //     {if(isExistsId === 'SUCCESS'){
+  //       if (auth != null && auth.message === 'SUCCESS'){
+  //         setCookie({}, 'message', auth.message, {httpOnly: false, path: '/'})
+  //         setCookie({}, 'token', auth.token, {httpOnly: false, path: '/'})
+  //         console.log('서버에서 넘어온 메세지 '+parseCookies().message)
+  //         console.log('서버에서 넘어온 토큰 '+parseCookies().token)
+  //         console.log(jwtDecode(parseCookies().token))
+  //         router.push('/pages/boards/list')
+  //       }else{
+  //         console.log('Login Failed')
+  //       }}else{
+  //         console.log('ID Failed')
+  //       }
+  //   }, [auth, isRightId]);
 
   return (
     <div className='margincenter w-4/5 my-[30px] border-double border-4'>

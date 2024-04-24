@@ -13,6 +13,9 @@ import java.util.Optional;
 
 public interface UserService extends CommandService<UserDTO>, QueryService<UserDTO> {
   MessengerVO modify(UserDTO user);
+
+  Boolean logout(String username);
+
   List<UserDTO> findUsersByName(String name);
   List<UserDTO> findUsersByJob(String job);
   Optional<User> findUserByUsername(String username);
@@ -46,7 +49,7 @@ public interface UserService extends CommandService<UserDTO>, QueryService<UserD
 
   MessengerVO login(UserDTO param);
 
-  MessengerVO existsUsername(String username);
+  Boolean existsUsername(String username);
 
-  MessengerVO logout(String username);
+  Boolean logout(Long id);
 }

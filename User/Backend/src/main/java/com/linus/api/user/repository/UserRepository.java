@@ -19,4 +19,7 @@ public interface UserRepository extends JpaRepository<User,Long> {
   public List<User> modifyTokenById(@Param("id") Long id);
 
   Optional<User> findByUsername(String username);
+
+  @Query("select count(id) as count from USERS where username = :username")
+  Integer existsUsername(@Param("username") String username);
 }

@@ -2,7 +2,6 @@ package com.linus.api.user.service;
 
 import com.linus.api.common.component.JwtProvider;
 import com.linus.api.common.component.MessengerVO;
-import com.linus.api.common.component.PageRequestVO;
 import com.linus.api.user.model.User;
 import com.linus.api.user.model.UserDTO;
 import com.linus.api.user.repository.UserRepository;
@@ -11,10 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.sql.SQLException;
-import java.util.Base64;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -52,36 +48,37 @@ public class UserServiceImpl implements UserService {
     return null;
   }
 
-  @Transactional
+//  @Transactional
+//  @Override
+//  public MessengerVO login(UserDTO param) {
+//
+////    boolean flag = repo.findByUsername(param.getUsername()).get().getPassword().equals(param.getPassword());
+//    User user = repo.findByUsername(param.getUsername()).get();
+//    boolean flag = user.getPassword().equals(param.getPassword());
+//
+//
+//    String AccessToken = jwtProvider.createToken(entityToDto(user));
+//    jwtProvider.printPayload(AccessToken);
+//
+//    return MessengerVO.builder()
+//            .message(flag ? "SUCCESS" : "FAIL")
+//            .accessToken(flag ? AccessToken : "None")
+//            .build();
+//  }
+
   @Override
-  public MessengerVO login(UserDTO param) {
-
-//    boolean flag = repo.findByUsername(param.getUsername()).get().getPassword().equals(param.getPassword());
-    User user = repo.findByUsername(param.getUsername()).get();
-    boolean flag = user.getPassword().equals(param.getPassword());
-
-
-    String AccessToken = jwtProvider.createToken(entityToDto(user));
-    jwtProvider.printPayload(AccessToken);
-
-    return MessengerVO.builder()
-            .message(flag ? "SUCCESS" : "FAIL")
-            .accessToken(flag ? AccessToken : "None")
-            .build();
+  public Boolean existsUsername(String username){
+    Integer count =repo.existsUsername(username);
+    return count  == 1;
   }
 
   @Override
-  public MessengerVO existsUsername(String username){
-    boolean flag = repo.findByUsername(username).isPresent();
-    log.info(String.valueOf(flag));
-    log.info(username);
-    return MessengerVO.builder()
-            .message(flag ? "SUCCESS" : "FAIL")
-            .build();
+  public Boolean logout(Long id) {
+    return null;
   }
 
   @Override
-  public MessengerVO logout(String username) {
+  public Boolean logout(String username) {
     return null;
   }
 
@@ -108,5 +105,23 @@ public class UserServiceImpl implements UserService {
   @Override
   public Optional<User> findUserByUsername(String username) {
     return repo.findByUsername(username);
+  }
+
+  @Transactional
+  @Override
+  public MessengerVO login(UserDTO dto) {
+    log.info("로그인 서비스로 들어온 파라미터 : "+dto);
+    User user = repo.findByUsername(dto.getUsername()).get();
+    String accessToken = jwtProvider.createToken(entityToDto(user));
+    boolean flag = user.getPassword().equals(dto.getPassword());
+    // passwordEncoder.matches
+
+    // 토큰을 각 섹션(Header, Payload, Signature)으로 분할
+    jwtProvider.printPayload(accessToken);
+
+    return MessengerVO.builder()
+            .message(flag ? "SUCCESS" : "FAILURE")
+            .accessToken(flag ? accessToken : "None")
+            .build();
   }
 }
