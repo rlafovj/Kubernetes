@@ -1,17 +1,17 @@
 import { createSlice } from "@reduxjs/toolkit";
 import {IArticle} from './article.model'
-import { findAllArticles } from "./article.service";
+import { findAllArticles, findArticleByBoardId } from "./article.service";
 import { findAllArticlesAPI } from "./article.api";
 
 const articleThunks = [findAllArticles]
 
-interface ArticleState{
+interface IArticleState{
   json?: IArticle,
   array?: Array<IArticle>,
   count?: number
 }
 
-export const initialState: ArticleState = {
+export const initialState: IArticleState = {
   json: {} as IArticle,
   array: [],
   count: 0
@@ -46,6 +46,7 @@ export const articleSlice = createSlice({
 
     builder
       .addCase(findAllArticles.fulfilled,handleFulfilled)
+      .addCase(findArticleByBoardId.fulfilled,  (state: any, {payload}: any) => {state.json = payload})
     }
   }
 )
@@ -55,6 +56,7 @@ export const getAllArticles = (state: any) => {
   console.log(JSON.stringify(state.article.array))
   return state.article.array;
 }
+export const getArticleByBoardId = (state: any) => (state.article.json)
 
 export const {} = articleSlice.actions
 export default articleSlice.reducer

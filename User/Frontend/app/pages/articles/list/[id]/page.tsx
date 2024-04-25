@@ -68,6 +68,8 @@ const ArticlesPage : NextPage = ({data}:any) => {
         checkboxSelection
         disableRowSelectionOnClick
       />}
+      <td><button>수정</button></td>
+      <td><button>삭제</button></td>
     </Box>
         <td>
           <MoveButton text="글쓰기" path={`${PG.ARTICLE}/list`}/>

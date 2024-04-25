@@ -20,6 +20,8 @@ public interface UserRepository extends JpaRepository<User,Long> {
 
   Optional<User> findByUsername(String username);
 
+
+
   @Query("select count(id) as count from USERS where username = :username")
   Integer existsUsername(@Param("username") String username);
 }

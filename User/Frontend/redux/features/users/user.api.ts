@@ -23,6 +23,16 @@ export const loginAPI = async(user: IUser)=>{
     }
 }
 
+export const findUserByIdAPI = async (id: number) =>{
+    try{
+        const response = await instance().get(`/users/detail`,{params: {id}})
+        return response.data
+    }catch(error){
+        console.log(error)
+        return error
+    }
+}
+
 export const logoutAPI = async () => {
     try{
         const response = await instance().get(`/users/logout`)
