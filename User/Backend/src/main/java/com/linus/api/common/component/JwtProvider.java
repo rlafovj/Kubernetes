@@ -49,7 +49,7 @@ public class JwtProvider {
             .subject("user Auth")
             .claim("username", dto.getUsername())
             .claim("job", dto.getJob())
-            .claim("userId", dto.getId())
+            .claim("userSId", dto.getId())
             .compact();
     log.info("로그인성공으로 발급된 토큰 : " + token);
     return token;
