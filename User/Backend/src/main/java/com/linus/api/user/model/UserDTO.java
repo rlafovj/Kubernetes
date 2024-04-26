@@ -17,6 +17,7 @@ import org.springframework.stereotype.Component;
 public class UserDTO {
   private Long id;
   private String username;
+  private String email;
   private String password;
   private String name;
   private String phone;

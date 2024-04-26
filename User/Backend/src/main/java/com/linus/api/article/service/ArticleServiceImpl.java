@@ -3,6 +3,8 @@ package com.linus.api.article.service;
 import com.linus.api.article.repository.ArticleRepository;
 import com.linus.api.article.model.Article;
 import com.linus.api.article.model.ArticleDTO;
+import com.linus.api.board.model.Board;
+import com.linus.api.board.repository.BoardRepository;
 import com.linus.api.common.component.MessengerVO;
 import com.linus.api.common.component.PageRequestVO;
 import lombok.RequiredArgsConstructor;
@@ -16,10 +18,12 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ArticleServiceImpl implements ArticleService {
     private final ArticleRepository repo;
+    private final BoardRepository boardRepo;
 
     @Override
-    public MessengerVO save(ArticleDTO dto) {
-        Article ent = repo.save(dtoToEntity(dto));
+    public MessengerVO save(ArticleDTO param) {
+        Board board = boardRepo.findById(param.getBoard()).orElseThrow(() -> new IllegalArgumentException("Invalid board ID: " + param.getBoard()));
+        Article ent = repo.save(dtoToEntity(param));
         System.out.println((ent instanceof Article) ? "SUCCESS" : "FAIL");
         return MessengerVO.builder()
                 .message((ent instanceof Article) ? "SUCCESS" : "FAIL")

@@ -5,7 +5,7 @@ export const findAllBoardsAPI = async (page: number) => {
         const response = await instance().get('/boards/list',{
             params: {page, limit: 10}
         })
-        console.log(response.data)
+        console.log("findBoardAPI Data : "+response.data)
         return response.data
     } catch (error) {
         console.log('findBoardAPI Error : '+error)

@@ -28,11 +28,10 @@ import java.util.Map;
 public class ArticleController {
   private final ArticleService service;
 
-  @PostMapping("")
+  @PostMapping("/save")
   public ResponseEntity<MessengerVO> save(@RequestBody ArticleDTO param) {
-    log.info("입력받은 정보 : {}", param );
-    service.save(param);
-    return ResponseEntity.ok(new MessengerVO());
+    log.info("입력받은 정보 : {}", param.toString() );;
+    return ResponseEntity.ok(service.save(param));
   }
   @DeleteMapping("/delete/{id}")
   public ResponseEntity<MessengerVO> deleteById(@PathVariable long id) throws SQLException {

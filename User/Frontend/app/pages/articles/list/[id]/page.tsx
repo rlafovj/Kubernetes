@@ -72,7 +72,7 @@ const ArticlesPage : NextPage = ({data}:any) => {
       <td><button>삭제</button></td>
     </Box>
         <td>
-          <MoveButton text="글쓰기" path={`${PG.ARTICLE}/list`}/>
+          <MoveButton text="글쓰기" path={`${PG.ARTICLE}/save`}/>
         </td>
     </>)
 }

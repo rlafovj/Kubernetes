@@ -22,3 +22,13 @@ export const findArticleByBoardIdAPI = async (page: number ,id: number) => {
     return error
     }
 }
+
+export const saveArticleAPI = async (article: any) => {
+    try{
+        const response = await await instance().post('/articles/save', article)
+        return response.data
+    } catch (error) {
+        console.log(error)
+        return error
+    }
+}

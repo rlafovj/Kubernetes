@@ -50,7 +50,7 @@ public class AuthInterceptor implements HandlerInterceptor {
             .map(i -> jwtProvider.extractTokenFromHeader(i))
             .filter(i -> !i.equals("undefined token"))
             .peek(token -> log.info("1- 인터셉터 토큰 로그 Bearer 포함 : {}", token))
-            .map(i -> jwtProvider.getPayload(i).get("id", Long.class))
+            .map(i -> jwtProvider.getPayload(i).get("userId", Long.class))
             .map(id -> userRepository.findById(id))
             .filter(i -> i.isPresent())
             .peek(id -> log.info("2- 인터셉트사용자 ID : {}", id))

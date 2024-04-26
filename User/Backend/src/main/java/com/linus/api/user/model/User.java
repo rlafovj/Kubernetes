@@ -24,6 +24,9 @@ public class User extends BaseEntity {
     @Column(name= "USERNAME")
     private String username;
 
+    @Column(name= "EMAIL")
+    private String email;
+
     @Column(name= "PASSWORD")
     private String password;
 
@@ -42,11 +45,12 @@ public class User extends BaseEntity {
     private String token;
 
     @Builder(builderMethodName = "builder")
-    public User(Long id, String username, String password,
+    public User(Long id, String username, String email ,String password,
                 String name, String phone,
                 String address, String job) {
         this.id = id;
         this.username = username;
+        this.email = email;
         this.password = password;
         this.name = name;
         this.phone = phone;
