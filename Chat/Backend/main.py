@@ -6,6 +6,8 @@ from pydantic import BaseModel
 import os
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
+from app.api.titanic.model.titanic_model import TitanicModel
+from app.api.titanic.main_router import router
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 load_dotenv(os.path.join(BASE_DIR, ".env"))
@@ -20,6 +22,8 @@ class Response(BaseModel):
 
 
 app = FastAPI()
+
+app.include_router(router)
 
 origins = ["*"]
 
@@ -37,7 +41,7 @@ def root():
     return {"message": "Hello World"}
 
 
-@app.post("/chat")
+#@app.post("/chat")
 def chatting(req: Request):
     print('딕셔너리 내용')
     print(req)
