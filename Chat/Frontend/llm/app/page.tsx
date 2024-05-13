@@ -10,6 +10,13 @@ type Inputs = {
 export default function Home() {
 
   const [message, setMessage] = useState('')
+  // const [category, setCategory] = useState('')
+
+  type Input = {
+    question: string
+    category: string
+    exampleRequired?: string
+  }
 
   const {
     register,
@@ -19,7 +26,7 @@ export default function Home() {
   } = useForm<Inputs>()
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     console.log('입력된 값 : '+JSON.stringify(data))
-    fetch('http://localhost:8000/titanic', {
+    fetch('http://localhost:8000/api/chat/titanic', {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
