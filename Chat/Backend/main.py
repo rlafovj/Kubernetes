@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from icecream import ic
 from langchain_openai import OpenAI
 from langchain_community.chat_models import ChatOpenAI
 from langchain.schema import SystemMessage, HumanMessage, AIMessage
@@ -66,3 +67,14 @@ def chatting(req: Request):
     # print(chat.predict_messages(message))
 
     return Response(answer=chat.predict(req.question))
+
+@app.get("/items/{item_id}")
+def read_item(item_id: int, q: str = None):
+    return {"item_id": item_id, "q": q}
+
+if __name__ == "__main__":
+    import os
+    import uvicorn
+    os.chdir(os.getcwd())
+    ic(f'{os.getcwd()}')
+    uvicorn.run(app, host="localhost", port=8000)

@@ -1,5 +1,7 @@
 from fastapi import APIRouter
+from icecream import ic
 from pydantic import BaseModel
+CONTEXT = 'C:\\Users\\bitcamp\\Kubernetes\\Chat\\Backend\\app\\api\\context'
 
 from app.api.titanic.service.titanic_service_py import TitanicService
 
@@ -15,15 +17,12 @@ class Response(BaseModel):
 
 @router.post("/titanic")
 async def titanic(req: Request):
-    print('타이타닉 딕셔너리 내용')
-    hello = 'C:\\Users\\bitcamp\\Kubernetes\\Chat\\Backend\\app\\api\\titanic\\data\\hello.txt'
-    f = open(hello, 'r', encoding='utf-8')
+    ic('타이타닉 딕셔너리 내용')
+    hello = f'{CONTEXT}data\\hello.txt'
+    f = open(hello, "r", encoding="utf-8")
     data = f.read()
-    print(data)
+    ic(data)
     f.close()
-
-    service.process()
-    print(req)
-    print(service.process())
-
+    service.preprocess()
+    ic(req)
     return {"answer": "1000명"}
