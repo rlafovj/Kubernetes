@@ -17,7 +17,7 @@ class Response(BaseModel):
 
 @router.post("/titanic")
 async def titanic(req: Request):
-    ic('타이타닉 딕셔너리 내용')
+    ic('타이타닉 딕셔너리 내용.')
     hello = f'{CONTEXT}data\\hello.txt'
     f = open(hello, "r", encoding="utf-8")
     data = f.read()
